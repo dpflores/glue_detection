@@ -22,6 +22,8 @@ except ModuleNotFoundError:
 # VARIABLES
 # El threshold es el valor que se usa para binarizar la imagen (0 - 255)
 THRESHOLD = 100
+# Tamaño de la ventana del filtro gaussiano
+GAUSSIAN_WINDOW_SIZE = 7
 
 img = cv2.imread('images/rellena_not_filled_close.png')
 
@@ -70,7 +72,8 @@ async def display_2d(fg, getter, title):
         img2 = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
         # Gaussian filter of the image with kernel of 5x5
-        img2 = cv2.GaussianBlur(img2, (7, 7), 0)
+        img2 = cv2.GaussianBlur(
+            img2, (GAUSSIAN_WINDOW_SIZE, GAUSSIAN_WINDOW_SIZE), 0)
 
         # thresholding the image
         ret, img3 = cv2.threshold(img2, THRESHOLD, 255, cv2.THRESH_BINARY)
