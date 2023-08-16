@@ -94,7 +94,7 @@ async def display_2d_2(fg, getter, title):
         cv2.imwrite(
             'captures2/capture_{}.png'.format(str(datetime.datetime.now())), img)
 
-        time.sleep(intervalo)
+        time.sleep(0.2)
 
     cv2.destroyAllWindows()
 
