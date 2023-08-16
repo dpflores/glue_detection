@@ -124,9 +124,9 @@ async def main():
 
     parser = argparse.ArgumentParser()
     parser.add_argument("--pcic-port", help="The pcic port from which images should be received", type=int,
-                        required=True)
+                        required=False, default=50010)
     parser.add_argument("--image", help="The image to received (default: distance)", type=str,
-                        choices=image_choices, required=True)
+                        choices=image_choices, required=False, default="jpeg")
     parser.add_argument("--ip", help="IP address of the sensor (default: 192.168.0.69)",
                         type=str, required=False, default="192.168.0.69")
     parser.add_argument("--xmlrpc-port", help="XMLRPC port of the sensor (default: 80)",
