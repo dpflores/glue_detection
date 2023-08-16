@@ -19,6 +19,10 @@ except ModuleNotFoundError:
     OPEN3D_AVAILABLE = False
 
 
+# VARIABLES
+# El threshold es el valor que se usa para binarizar la imagen (0 - 255)
+THRESHOLD = 100
+
 img = cv2.imread('images/rellena_not_filled_close.png')
 
 
@@ -69,7 +73,7 @@ async def display_2d(fg, getter, title):
         img2 = cv2.GaussianBlur(img2, (7, 7), 0)
 
         # thresholding the image
-        ret, img3 = cv2.threshold(img2, 80, 255, cv2.THRESH_BINARY)
+        ret, img3 = cv2.threshold(img2, THRESHOLD, 255, cv2.THRESH_BINARY)
 
         # resize images img2 and img3 TO 500x500
         img2 = cv2.resize(img2, (500, 500))
