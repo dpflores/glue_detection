@@ -6,13 +6,16 @@
 # THE PROGRAM IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND.
 #
 
-from ifm3dpy import O3R, FrameGrabber, buffer_id
-import cv2
-import argparse
-import asyncio
-
-import datetime
 import time
+import datetime
+import asyncio
+import argparse
+import cv2
+from ifm3dpy import O3R, FrameGrabber, buffer_id
+
+# VARIABLES
+SLEEP_SECONDS = 1
+
 
 try:
     import open3d as o3d
@@ -94,7 +97,7 @@ async def display_2d_2(fg, getter, title):
         cv2.imwrite(
             'captures2/capture_{}.png'.format(str(datetime.datetime.now())), img)
 
-        time.sleep(1)
+        time.sleep(SLEEP_SECONDS)
 
     cv2.destroyAllWindows()
 
