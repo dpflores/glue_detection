@@ -53,6 +53,9 @@ def get_xyz(frame):
     return frame.get_buffer(buffer_id.XYZ)
 
 
+counter = 0
+
+
 async def display_2d(fg, getter, title):
     fg.start([buffer_id.NORM_AMPLITUDE_IMAGE, buffer_id.RADIAL_DISTANCE_IMAGE,
              buffer_id.XYZ, buffer_id.REFLECTIVITY, buffer_id.MONOCHROM_2D])
@@ -62,9 +65,10 @@ async def display_2d(fg, getter, title):
         frame = await fg.wait_for_frame()
 
         img = getter(frame)
-
+        counter += 1
+        print(counter)
         cv2.imshow(title, img)
-        cv2.waitKey(15)
+        cv2.waitKey(1)
 
         if cv2.getWindowProperty(title, cv2.WND_PROP_VISIBLE) < 1:
             break

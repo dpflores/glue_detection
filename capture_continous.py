@@ -14,7 +14,7 @@ import cv2
 from ifm3dpy import O3R, FrameGrabber, buffer_id
 
 # VARIABLES
-SLEEP_SECONDS = 1
+SLEEP_SECONDS = 0.01
 
 
 try:
