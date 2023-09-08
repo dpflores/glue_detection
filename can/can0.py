@@ -7,18 +7,16 @@ OVP_ID = 123
 
 def send_high():
     print('sending high')
-    id_str = '240'
+    id_str = '0x240'
     id = int(id_str, 16)
-    nw.send_message(id, 1, remote=False)
-    os.exec('cansend can0 240#01')
+    nw.send_message(id, bx01, remote=False)
 
 
 def send_low():
     print('sending low')
     id_str = '0x240'
     id = int(id_str, 16)
-    nw.send_message(id, 1, remote=False)
-    os.exec('cansend can0 240#00')
+    nw.send_message(id, bx00, remote=False)
 
 
 def on_message_received(cob_id, data, timestamp):
