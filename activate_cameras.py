@@ -1,4 +1,5 @@
 import json
+import os
 from ifm3dpy import O3R
 o3r = O3R()
 config = o3r.get()  # get the configuration saved on the VPU
@@ -10,8 +11,13 @@ config['ports']['port0']['state'] = "RUN"  # Expecting a head on Port 0
 # config['ports']['port1']['state'] = "RUN" #Expecting a head on Port 0
 # config['ports']['port2']['state'] = "RUN"  # Expecting a head on Port 0
 # config['ports']['port3']['state'] = "RUN" #Expecting a head on Port 0
+
+
 o3r.set(config)
 print(json.dumps(config, indent=4))
+
+os.system("echo {} | jq '.ports.port0.acquisition.framerate=10' | ifm3d config")
+
 # o3r.set(config)
 
 
