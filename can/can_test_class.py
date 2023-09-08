@@ -1,4 +1,5 @@
 from can_classes import *
+import time
 
 CAN_INTERFACE = 'can0'
 TRIGGER_IN_MESSAGE_ID = '0x260'
@@ -15,7 +16,10 @@ def main():
 
     # Bucle para seguir ejecutando el programa
     while True:
-        pass
+        can_red.send_high(TRIGGER_OUT_MESSAGE_ID)
+        time.sleep(1)
+        can_red.send_low(TRIGGER_OUT_MESSAGE_ID)
+        time.sleep(1)
 
 
 if __name__ == '__main__':
