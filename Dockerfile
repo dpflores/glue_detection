@@ -45,6 +45,8 @@ RUN sudo apt-get install -y libglib2.0-0
 # Para ver el hardware del sistema
 RUN sudo apt-get install -y lshw
 
+# para el candump
+RUN sudo apt-get install can-utils
 
 
 RUN sudo apt-get clean
@@ -65,6 +67,3 @@ COPY --chown=ifm:ifm . /home/ifm/filling_detection
 #For security reasons, using a "user" is recommended
 
 USER ifm
-
-#Easier to debug the container if issues are happening
-ENV PYTHONFAULTHANDLER=1    
