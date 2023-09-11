@@ -1,5 +1,4 @@
 from camera_classes import *
-# Here we implement a class called O3R that implements viewer.py in order to simplify the code
 
 
 # For testing purposes

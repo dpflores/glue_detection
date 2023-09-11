@@ -9,12 +9,12 @@ class CANOpen:
     def send_high(self, message_id='0x240'):
         print(f"sending high to {message_id}")
         id = int(message_id, 16)
-        self.nw.send_message(id, bx01, remote=False)
+        self.nw.send_message(id, b'\x01', remote=False)
 
     def send_low(self, message_id='0x240'):
         print(f"sending low to {message_id}")
         id = int(message_id, 16)
-        self.nw.send_message(id, bx00, remote=False)
+        self.nw.send_message(id, b'\x00', remote=False)
 
     def on_message_received(self, cob_id, data, timestamp):
         # Log the received message
@@ -27,7 +27,7 @@ class CANOpen:
         if data[0] == 0:
             print("LOW")
 
-    def subscribe(self, message_id='0x260', callback_function=self.on_message_received):
+    def subscribe(self, message_id='0x260', callback_function=None):
         id = int(message_id, 16)
         listener = self.nw.subscribe(id, callback_function)
         print(f"subscribed to {message_id}")

@@ -12,17 +12,24 @@ TRIGGER_IN_MESSAGE_ID = '0x260'
 TRIGGER_OUT_MESSAGE_ID = '0x240'
 
 
+o3r = O3RCamera2D()
+
+
 def message_callback(cob_id, data, timestamp):
     if data[0] == 1:
-        cv2.imwrite('test.jpg', o3r.img)
+        print("Saving")
+        cv2.imwrite('test_out.jpg', o3r.img)
 
     if data[0] == 0:
         print("No saving")
 
 
-def main():
+async def main():
     can_red = CANOpen(CAN_INTERFACE)
     can_red.subscribe(TRIGGER_IN_MESSAGE_ID, message_callback)
+
+    # La tomada de fotos se hace en un hilo aparte
+    await o3r.run()
 
     # Bucle para seguir ejecutando el programa
     while True:
@@ -33,6 +40,4 @@ def main():
 
 
 if __name__ == '__main__':
-    o3r = O3RCamera2D()
-    asyncio.run(o3r.run())
-    main()
+    asyncio.run(main())

@@ -64,7 +64,7 @@ class O3RCamera2D:
         while True:
             self.frame = await fg.wait_for_frame()
             self.img = getter(self.frame)
-            # print(self.img)
+            print(self.img)
 
     async def run_display(self):
         # Esto se puede probar en la computadora conectada al OVP pues es con visualización

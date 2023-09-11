@@ -16,23 +16,14 @@ ARG DEBIAN_FRONTEND=noninteractive
 ENV DEBIAN_FRONTEND=noninteractive
 # RUN sudo echo 'debconf debconf/frontend select Noninteractive' | sudo debconf-set-selections
 
-# RUN sudo apt-get update && sudo apt-get -y upgrade
-# RUN apt-get update && \
-#     apt-get install -y libboost-all-dev \
-#                        git \
-#                        libcurl4-openssl-dev \
-#                        libgtest-dev \
-#                        libgoogle-glog-dev \
-#                        libxmlrpc-c++8-dev \
-#                        libopencv-dev \
-#                        libpcl-dev \
-#                        libproj-dev \
-#                        python3-dev \
-#                        python3-pip
 
 RUN sudo apt-get update
 
 RUN sudo apt-get install -y git
+
+RUN sudo apt-get install -y vim
+
+RUN sudo apt-get install -y nano
 
 RUN sudo apt-get install -y python3-pip
 
@@ -51,19 +42,17 @@ RUN sudo apt-get install can-utils
 
 RUN sudo apt-get clean
 
-
-# install python
-# RUN apt-get -y install --no-install-recommends build-essential \
-#     python3.8.10-dev
-
 # Your normal pip installation, within the venv. We also update pip.
 COPY requirements.txt .
 RUN pip3 install --no-cache-dir -r requirements.txt
 
 # Add the repository to docker image
-COPY --chown=ifm:ifm . /home/ifm/filling_detection
+COPY --chown=ifm:ifm . /home/ifm/application
 
 
 #For security reasons, using a "user" is recommended
 
 USER ifm
+
+#Easier to debug the container if issues are happening
+ENV PYTHONFAULTHANDLER=1  
