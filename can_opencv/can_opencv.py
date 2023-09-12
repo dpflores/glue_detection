@@ -15,14 +15,24 @@ TRIGGER_OUT_MESSAGE_ID = '0x240'
 o3r = O3RCamera2D()
 can_red = CANOpen(CAN_INTERFACE)
 
+# Data para la detección de flanco
+previus_state = 0
+
+
+def analyze(image):
+    print("Saving")
+    cv2.imwrite('test_out.jpg', image)
+    print("Saved")
+
 
 def message_callback(cob_id, data, timestamp):
-    if data[0] == 1:
-        print("Saving")
-        cv2.imwrite('test_out.jpg', o3r.img)
+    global previus_state
+    if data[0] == 1 and previus_state == 0:
+        analyze(o3r.img)
+    previus_state = data[0]
 
-    if data[0] == 0:
-        print("No saving")
+
+# code of the function message_callback2 that only saves the image if there is a rising edge
 
 
 async def main():
