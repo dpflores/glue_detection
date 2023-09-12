@@ -6,8 +6,6 @@ FROM ghcr.io/ifm/ifm3d:v0.93.0-ubuntu-arm64
 # ENV IFM3D_IP 192.168.0.69
 
 
-
-
 WORKDIR /home/ifm
 
 #Security updates
@@ -19,23 +17,17 @@ ENV DEBIAN_FRONTEND=noninteractive
 
 RUN sudo apt-get update
 
-RUN sudo apt-get install -y git
-
 RUN sudo apt-get install -y vim
-
-RUN sudo apt-get install -y nano
 
 RUN sudo apt-get install -y python3-pip
 
+# Para Opencv
 RUN sudo apt install -y libgl1-mesa-glx
 
 RUN sudo apt-get install -y libglib2.0-0
 
 
 # Adicional
-# Para ver el hardware del sistema
-RUN sudo apt-get install -y lshw
-
 # para el candump
 RUN sudo apt-get install can-utils
 
@@ -47,7 +39,7 @@ COPY requirements.txt .
 RUN pip3 install --no-cache-dir -r requirements.txt
 
 # Add the repository to docker image
-COPY --chown=ifm:ifm . /home/ifm/application
+COPY --chown=ifm:ifm ./can_opencv /home/ifm/application
 
 
 #For security reasons, using a "user" is recommended
@@ -55,4 +47,13 @@ COPY --chown=ifm:ifm . /home/ifm/application
 USER ifm
 
 #Easier to debug the container if issues are happening
-ENV PYTHONFAULTHANDLER=1  
+ENV PYTHONFAULTHANDLER=1 
+
+
+# Para el jupyter notebook
+EXPOSE 8888
+
+# Startup
+ENTRYPOINT ["jupyter", "notebook"]
+
+

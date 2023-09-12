@@ -175,6 +175,19 @@ Por ejemplo, a continuación se muestra una comparación entre los resultados de
 
 
 
+## Jupyter Notebook
+
+Para acceder a jupyter notebook
+```
+ssh -L 8000:localhost:8888 oem@192.168.0.69
+```
+
+Luego en el navegador ingresamos con
+
+```
+localhost:8000
+```
+
 
 
 

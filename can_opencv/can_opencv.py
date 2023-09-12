@@ -13,6 +13,7 @@ TRIGGER_OUT_MESSAGE_ID = '0x240'
 
 
 o3r = O3RCamera2D()
+can_red = CANOpen(CAN_INTERFACE)
 
 
 def message_callback(cob_id, data, timestamp):
@@ -25,7 +26,6 @@ def message_callback(cob_id, data, timestamp):
 
 
 async def main():
-    can_red = CANOpen(CAN_INTERFACE)
     can_red.subscribe(TRIGGER_IN_MESSAGE_ID, message_callback)
 
     # La tomada de fotos se hace en un hilo aparte
