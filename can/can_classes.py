@@ -16,6 +16,11 @@ class CANOpen:
         id = int(message_id, 16)
         self.nw.send_message(id, b'\x00', remote=False)
 
+    def send_message(self, message=b'\x00', message_id='0x240'):
+        print(f"sending message to {message_id}")
+        id = int(message_id, 16)
+        self.nw.send_message(id, message, remote=False)
+
     def on_message_received(self, cob_id, data, timestamp):
         # Log the received message
         # print("Received message: cob_id={}, data={}, timestamp={}".format(cob_id, data, timestamp))
