@@ -12,6 +12,10 @@ CAMERA_IP = '192.168.0.69'
 XMLRPC_PORT = 80
 PCIC_PORT = 50010
 
+
+ports_dict = {"50010": "port0", "50011":"port1", "50012":"port2", "50013":"port3", "50014":"port4", "50015":"port5"}
+
+
 # Here we implement a class called O3R that implements viewer.py in order to simplify the code
 
 
@@ -21,18 +25,18 @@ class O3RCamera2D:
         self.cam = O3R(ip, xmlrpc_port)
         self.getter = self.get_jpeg
         self.pcic_port = pcic_port
+        self.port = ports_dict[str(pcic_port)]
         self.activate_camera()
         path = os.path.dirname(os.path.abspath(__file__))
         self.img = cv2.imread(path + '/test.png')
 
-    def activate_camera(self, port='port0', rate=10):
+    def activate_camera(self, rate=15):
         config = self.cam.get()  # get the configuration saved on the VPU
-        # Expecting a head on Port 0
-        config['ports'][port]['acquisition']['framerate'] = 15
-        config['ports'][port]['state'] = "RUN"  # Expecting a head on Port 0
+        # Expecting a head on Port
+        config['ports'][self.port]['acquisition']['framerate'] = rate
+        config['ports'][self.port]['state'] = "RUN"  # Expecting a head on Port
 
         self.cam.set(config)
-        # print(json.dumps(config, indent=4))
 
     def get_jpeg(self, frame):
         return cv2.imdecode(frame.get_buffer(buffer_id.JPEG_IMAGE), cv2.IMREAD_UNCHANGED)
