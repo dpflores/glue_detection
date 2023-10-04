@@ -26,6 +26,8 @@ RUN sudo apt install -y libgl1-mesa-glx
 
 RUN sudo apt-get install -y libglib2.0-0
 
+# Para cmake
+RUN sudo apt install -y g++ cmake make libgtk2.0-dev pkg-config
 
 # Adicional
 # para el candump
