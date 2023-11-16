@@ -202,7 +202,7 @@ create docker-compose.yml
 ```
 version: '3.7'
 services:
-    nodered:
+    jupyter:
         image: glue_detection_image
         ports:
             - "8888:8888"
