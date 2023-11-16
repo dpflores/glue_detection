@@ -1,24 +1,28 @@
 # Detección con una computadora de escritorio
 
 A continuación se explica el uso de las cámaras y la visualización de la solución implementada en una computadora de escritorio.
-## Pasos de conexión 
+
+## Pasos de conexión
+
 - Antes de alimentar el OVP, conectar la o las camaras a utilizar.
 - Alimentar el OVP y despues de unos segundos verificar que los leds de las cámaras conectadas esten activados.
 - Conectar el cable de ethernet a ETH0
 - Colocar tu IP de ethernet a algo similar a la IP del OVP (por ejemplo: 192.168.0.100)
 
 ## Uso de las cámaras
+
 - Correr el archivo `activate_cameras.py` en la carpeta filling detection para activar el uso de los puertos que se han conectado (modificar si es necesario).
 
-``` 
+```
 python3 activate_cameras.py
 ```
 
 Para comprobar que se está recibiendo imagen del OVP, correr en la terminal la siguiente linea
 
-``` 
+```
 python3 viewer.py --pcic-port 50010 --image jpeg
 ```
+
 > El pci-port va de 50010 (port0) a 50015 (port5), tener en cuenta que los puertos 2D son los puertos 0 y 2, siendo el resto los puertos 3D.
 
 ## Pruebas con detección de círculos (rellenas)
@@ -27,9 +31,9 @@ python3 viewer.py --pcic-port 50010 --image jpeg
 
 Para la detección del relleno de galletas circulares se ha utilizado técnicas de procesamiento de imágenes en el espacio de color HSV (Hue, Saturation, and Value), donde se ha trabajdo con la capa de saturación pues brinda mayor información y contraste entre la galleta y la crema de relleno.
 
-Para revisar el funcionamiento correcto, correr la siguiente línea en la terminal (es necesario ubicarnos en el folder `filling_detection` para poder correr el archivo). 
+Para revisar el funcionamiento correcto, correr la siguiente línea en la terminal (es necesario ubicarnos en el folder `filling_detection` para poder correr el archivo).
 
-``` 
+```
 python3 test_circle.py
 ```
 
@@ -37,7 +41,7 @@ El resultado muestra una imagen de prueba, donde se podrá observar el porcentaj
 
 Para la detección en tiempo real, correr la siguiente línea
 
-``` 
+```
 python3 live_circle_test.py --pcic-port 50010 --image jpeg
 ```
 
@@ -59,27 +63,28 @@ A continuación se muestran unas fotos y un video de demostración del funcionam
 
 <img src="figures/test.gif" alt="test video" width="50%"/>
 
-
-
 # Detección con OVP800 mediante docker
 
 Hasta ahora, todo el procesamiento a partir de las imágenes de la cámara han sido realizadas en una computadora de escritorio, cuya principal ventaja es la visulización. Ahora se desea implementar la misma solución en la unidad de video OVP800 construyendo una imagen de docker, escrita en el `Dockerfile`, con la solución propuesta. Entonces, seguimos los siguientes pasos.
 
 ## Construcción de la imagen de docker
+
 > Proceso en computadora de escritorio
 
 Para construir la imagen alojada en el `Dockerfile`, en la carpeta `filling_detection` corremos la siguiente línea.
 
-``` 
+```
 docker build . -t filling_detection_image
 ```
 
 Donde `filling detection_image` es el nombre de la imagen a construirse.
 
 luego de la construcción, ejecutamos la línea
-``` 
+
+```
 docker images
 ```
+
 y veremos que la imagen figura en la lista mostrada.
 
 Ahora guardamos la imagen en un archivo `.tar` para poder subirlo posteriormente en el OVP.
@@ -87,8 +92,6 @@ Ahora guardamos la imagen en un archivo `.tar` para poder subirlo posteriormente
 ```
 docker save filling_detection_image > fdi.tar
 ```
-
-
 
 ## Envio por SCP y conexión al OVP por SSH
 
@@ -133,6 +136,7 @@ Una vez haya cargado, ejecutamos
 ```
 docker images
 ```
+
 y se debería mostrar la imagen `filling_detection_image` en la lista.
 
 Ahora, procedemos a correr la imagen en un contenedor, para ello ejecutamos la siguiente línea.
@@ -143,7 +147,7 @@ docker run --name fdi_container -it filling_detection_image
 
 Lo cual cambiará a una nueva terminal, que en este caso viene a ser la terminal del contendor `fdi_container`.
 
-## Pruebas con detección de círculos 
+## Pruebas con detección de círculos
 
 > Proceso en la terminal del contenedor `fdi_container`
 
@@ -154,15 +158,16 @@ Como el repositorio `filling_detection` ya está incluido en el contenedor, acce
 ```
 cd filling_detection
 ```
+
 una vez en la carpeta, activamos las cámaras conectadas con
 
-``` 
+```
 python3 activate_cameras.py
 ```
 
 Ahor podemos ejecutar la detección de galletas de forma contínua ejecutando.
 
-``` 
+```
 python3 live_circle_test_terminal.py --pcic-port 50010 --image jpeg
 ```
 
@@ -172,12 +177,14 @@ Por ejemplo, a continuación se muestra una comparación entre los resultados de
 
 <img src="figures/computer_ovp_compare.png" alt="Computer and ovp compare" style="width:80%">
 
+## Building and loading image
 
-
+docker buildx build --platform linux/arm64 . -t glue_detection_img
 
 ## Jupyter Notebook
 
 Para acceder a jupyter notebook
+
 ```
 ssh -L 8000:localhost:8888 oem@192.168.0.69
 ```
@@ -188,9 +195,25 @@ Luego en el navegador ingresamos con
 localhost:8000
 ```
 
+Para cargarlo
 
+create docker-compose.yml
 
+```
+version: '3.7'
+services:
+    nodered:
+        image: glue_detection_image
+        ports:
+            - "8888:8888"
 
+        environment:
+            TZ: America/Lima
+        volumes:
+            - "./container-data:/data"
+        privileged: true
+        restart: "always"
 
+        network_mode: "host"
 
-
+```

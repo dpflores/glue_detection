@@ -17,9 +17,11 @@ ENV DEBIAN_FRONTEND=noninteractive
 
 RUN sudo apt-get update
 
-RUN sudo apt-get install -y vim
+RUN sudo apt-get install net-tools -y
 
-RUN sudo apt-get install -y python3-pip
+# RUN sudo apt-get install -y vim
+
+RUN sudo apt-get install python3-pip -y 
 
 # Para Opencv
 RUN sudo apt install -y libgl1-mesa-glx
